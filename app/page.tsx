@@ -116,9 +116,9 @@ export default function Home() {
               <div key={i} className={`relative mb-12 flex items-center justify-center md:justify-between w-full ${item.pos === 'right' ? 'flex-row-reverse' : ''}`}>
                 <div className="hidden md:block w-5/12"></div>
                 <div className="absolute left-1/2 -translate-x-1/2 w-8 h-8 rounded-full border-4 border-white bg-hot-pink shadow-lg z-20 hidden md:block"></div>
-                <div className={`w-full md:w-5/12 glass p-8 rounded-[2rem] shadow-lg border-white transition-all hover:scale-105 ${item.highlight ? 'bg-gradient-to-br from-hot-pink to-accent-pink text-white ring-4 ring-hot-pink/30' : ''}`}>
-                  <span className={`text-xl font-black mb-2 block ${item.highlight ? 'text-white' : 'text-hot-pink'}`}>{item.year}</span>
-                  <p className={`text-lg font-medium ${item.highlight ? 'text-white/90' : 'text-foreground/80'}`}>{item.content}</p>
+                <div className={`w-full md:w-5/12 glass p-8 rounded-[2rem] shadow-lg border-white transition-all hover:scale-105 ${item.highlight ? 'bg-white ring-4 ring-hot-pink/30 border-hot-pink/50' : ''}`}>
+                  <span className={`text-xl font-black mb-2 block ${item.highlight ? 'text-hot-pink' : 'text-hot-pink/60'}`}>{item.year}</span>
+                  <p className={`text-lg font-medium ${item.highlight ? 'text-foreground' : 'text-foreground/80'}`}>{item.content}</p>
                 </div>
               </div>
             ))}
