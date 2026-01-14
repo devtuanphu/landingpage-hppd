@@ -11,31 +11,39 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    audioRef.current = new Audio("/music/Khúc Hát Mừng Sinh Nhật.mp3");
-    audioRef.current.loop = true;
+    // Create audio element
+    const audio = new Audio("/music/birthday.mp3");
+    audio.loop = true;
+    audioRef.current = audio;
     
-    // Attempt autoplay if browser allows (rare without interaction)
-    const playPromise = audioRef.current.play();
+    // Attempt autoplay (browsers usually block this)
+    const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
         setIsPlaying(true);
         setHasStarted(true);
-      }).catch(error => {
-        console.log("Autoplay blocked by browser. Waiting for interaction.");
+      }).catch(() => {
+        // Intentionally silent - this is expected behavior
       });
     }
 
     return () => {
-      audioRef.current?.pause();
+      audio.pause();
+      audioRef.current = null;
     };
   }, []);
 
   const handleStart = () => {
     if (audioRef.current) {
-      audioRef.current.play();
-      setIsPlaying(true);
+      audioRef.current.play()
+        .then(() => {
+          setIsPlaying(true);
+          setHasStarted(true);
+        })
+        .catch(err => console.error("Playback failed:", err));
+    } else {
+      setHasStarted(true);
     }
-    setHasStarted(true);
   };
 
   const toggleMusic = () => {
