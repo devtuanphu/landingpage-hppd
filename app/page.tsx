@@ -1,11 +1,53 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
   const [confetti, setConfetti] = useState<{ id: number, left: string, delay: string, color: string }[]>([]);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio("/music/Khúc Hát Mừng Sinh Nhật.mp3");
+    audioRef.current.loop = true;
+    
+    // Attempt autoplay if browser allows (rare without interaction)
+    const playPromise = audioRef.current.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        setIsPlaying(true);
+        setHasStarted(true);
+      }).catch(error => {
+        console.log("Autoplay blocked by browser. Waiting for interaction.");
+      });
+    }
+
+    return () => {
+      audioRef.current?.pause();
+    };
+  }, []);
+
+  const handleStart = () => {
+    if (audioRef.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
+    }
+    setHasStarted(true);
+  };
+
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(err => console.error("Playback failed:", err));
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   useEffect(() => {
     // Confetti initialization
@@ -39,6 +81,24 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-soft-pink text-foreground selection:bg-hot-pink selection:text-white">
+      {/* Welcome Overlay */}
+      {!hasStarted && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-hot-pink/90 backdrop-blur-2xl transition-all duration-700">
+          <div className="text-center p-8 glass border-none shadow-2xl rounded-[4rem] animate-float-complex">
+            <div className="text-8xl mb-6 animate-bounce">🎁</div>
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tighter">
+              BẠN CÓ MỘT <br /> MÓN QUÀ BẤT NGỜ!
+            </h1>
+            <button 
+              onClick={handleStart}
+              className="px-12 py-6 bg-white text-hot-pink rounded-full font-black text-2xl shadow-2xl hover:scale-110 active:scale-95 transition-all animate-pulse"
+            >
+              MỞ QUÀ NGAY 💖
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Dynamic Confetti */}
       <div className="fixed inset-0 pointer-events-none z-50">
         {confetti.map((piece) => (
@@ -261,9 +321,29 @@ export default function Home() {
         </footer>
       </div>
 
+      {/* Floating Music Button */}
+      <button 
+        onClick={toggleMusic}
+        className={`fixed bottom-8 right-8 z-[100] w-16 h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 scale-100 hover:scale-110 active:scale-95 ${isPlaying ? 'bg-hot-pink text-white animate-spin-slow' : 'bg-white text-hot-pink animate-bounce'}`}
+      >
+        {isPlaying ? (
+          <span className="text-2xl">🎵</span>
+        ) : (
+          <span className="text-2xl">🔇</span>
+        )}
+        <div className={`absolute -inset-2 rounded-full border-2 border-hot-pink/30 ${isPlaying ? 'animate-ping' : ''}`}></div>
+      </button>
+
       <style jsx global>{`
         .perspective-1000 {
           perspective: 1000px;
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 8s linear infinite;
         }
       `}</style>
     </main>
