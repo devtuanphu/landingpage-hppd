@@ -95,7 +95,7 @@ export default function Home() {
                 className="object-cover"
                 priority
               />
-              <div className="absolute bottom-6 right-6 bg-hot-pink text-white px-6 py-2 rounded-full font-black text-2xl shadow-lg border-2 border-white animate-bounce">
+              <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-sm text-hot-pink px-6 py-2 rounded-full font-black text-2xl shadow-[0_10px_30px_rgba(255,10,84,0.3)] border-2 border-hot-pink/20 animate-bounce">
                 25 YEARS OLD
               </div>
             </div>
