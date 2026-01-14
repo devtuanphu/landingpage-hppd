@@ -1,26 +1,102 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fff5f8;
+  --foreground: #6b2d39;
+  --primary-pink: #ff85a1;
+  --secondary-pink: #fbb1bd;
+  --accent-pink: #ff477e;
+  --hot-pink: #ff0a54;
+  --soft-pink: #fff0f3;
+  --gold: #ffb703;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary-pink: var(--primary-pink);
+  --color-secondary-pink: var(--secondary-pink);
+  --color-accent-pink: var(--accent-pink);
+  --color-hot-pink: var(--hot-pink);
+  --color-soft-pink: var(--soft-pink);
+  --color-gold: var(--gold);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Animations */
+@keyframes float-complex {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-30px) rotate(10deg) scale(1.05); }
+  66% { transform: translateY(10px) rotate(-5deg) scale(0.95); }
+}
+
+.animate-float-complex {
+  animation: float-complex 8s ease-in-out infinite;
+}
+
+@keyframes drift {
+  from { transform: translateX(-10px) translateY(0); }
+  to { transform: translateX(10px) translateY(-50px); opacity: 0; }
+}
+
+.animate-drift {
+  animation: drift 5s linear infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 71, 126, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(255, 71, 126, 0.5); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 10px;
+  height: 10px;
+  background: var(--accent-pink);
+  animation: confetti-fall 4s linear infinite;
+}
+
+@keyframes text-shine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.text-gradient-shine {
+  background: linear-gradient(
+    90deg,
+    var(--hot-pink),
+    var(--accent-pink),
+    var(--gold),
+    var(--accent-pink),
+    var(--hot-pink)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-shine 3s linear infinite;
 }
